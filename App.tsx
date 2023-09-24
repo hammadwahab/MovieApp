@@ -1,118 +1,117 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Dashboard from './src/screens/Dashboard';
+import Movies from './src/screens/Movies';
+import MovieDetail from './src/screens/MovieDetail';
+import More from './src/screens/More';
+import MediaLibrary from './src/screens/MediaLibrary';
+import Watch from './src/screens/Watch';
+import {Text} from 'react-native';
+import BookSeatsListing from './src/screens/BookSeatsListing';
+import BookSeatDetail from './src/screens/BookSeatDetail';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-function Section({children, title}: SectionProps): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const DashboardStackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Dashboard" component={Dashboard} />
+  </Stack.Navigator>
+);
+
+const WatchStackNavigator = () => (
+  <Stack.Navigator
+    initialRouteName="Movies"
+    screenOptions={{
+      headerTintColor: '#202C43',
+      headerTitleStyle: {fontSize: 16, lineHeight: 20, fontWeight: 500},
+      headerTitleAlign: 'left',
+      headerRight: () => <Text style={{marginRight: 15}}>HI</Text>,
+    }}>
+    <Stack.Screen name="Movies" component={Movies} />
+    <Stack.Screen
+      options={{headerShown: false}}
+      name="MovieDetail"
+      component={MovieDetail}
+    />
+    <Stack.Screen
+      name="BookSeatsListing"
+      component={BookSeatsListing}
+    />
+    <Stack.Screen
+      name="BookSeatDetail"
+      component={BookSeatDetail}
+    />
+  </Stack.Navigator>
+);
+
+const MediaLibraryStackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="MediaLibrary" component={MediaLibrary} />
+  </Stack.Navigator>
+);
+
+const MoreStackNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="More" component={More} />
+  </Stack.Navigator>
+);
+
+const TabNavigator = () => (
+  <Tab.Navigator
+    screenOptions={{
+      tabBarStyle: {backgroundColor: 'purple', borderRadius: 50},
+      tabBarActiveTintColor: 'white',
+      tabBarHideOnKeyboard: true,
+      tabBarIconStyle: {marginTop: 10},
+    }}>
+    <Tab.Screen
+      name="Dashboard"
+      component={DashboardStackNavigator}
+      options={{headerShown: false}}
+    />
+    <Tab.Screen
+      name="Watch"
+      component={WatchStackNavigator}
+      options={{
+        headerShown: false,
+        // tabBarStyle: {display: 'none'}
+      }}
+    />
+    <Tab.Screen
+      name="MediaLibrary"
+      component={MediaLibraryStackNavigator}
+      options={{headerShown: false}}
+    />
+    <Tab.Screen
+      name="More"
+      component={MoreStackNavigator}
+      options={{headerShown: false}}
+    />
+  </Tab.Navigator>
+);
+
+const App = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <NavigationContainer>
+      <TabNavigator />
+    </NavigationContainer>
   );
+};
+
+{
+  /* <Tab.Screen
+name="Movies"
+component={Movies}
+options={{ tabBarLabel: 'Watch' }}
+/>
+<Tab.Screen
+name="MovieDetail"
+component={MovieDetail}
+options={{ tabBarLabel: 'Media Library' }}
+/> */
 }
-
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
-
 export default App;
